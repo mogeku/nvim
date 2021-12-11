@@ -21,9 +21,9 @@ if !exists("g:os")
 endif
 
 if has("win64") || has("win32") || has("win16")
-	let $NVIM_HOME = $HOME/AppData/Local/nvim
+	let $NVIM_HOME = $HOME.'/AppData/Local/nvim'
 else
-	let $NVIM_HOME = $HOME/.config/nvim
+	let $NVIM_HOME = $HOME.'/.config/nvim'
 endif
 
 " ===
@@ -35,7 +35,7 @@ if empty(glob($NVIM_HOME.'/autoload/plug.vim'))
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-if empty(glob($NVIM_HOME.'/plugged/wildfire.vim/autoload/wildfire.vim'))
+if empty(glob('~/.vim/plugged/wildfire.vim/autoload/wildfire.vim'))
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
@@ -47,7 +47,7 @@ if empty(glob($NVIM_HOME.'/_machine_specific.vim'))
 	let has_machine_specific_file = 0
 	silent! exec "!cp ".$NVIM_HOME."/default_configs/_machine_specific_default.vim ".$NVIM_HOME."/_machine_specific.vim"
 endif
-source $XDG_CONFIG_HOME/nvim/_machine_specific.vim
+source $NVIM_HOME/_machine_specific.vim
 
 
 " ===
@@ -74,6 +74,8 @@ filetype on	"侦测文件类型
 filetype indent on
 filetype plugin on	"载入文件类型插件
 filetype plugin indent on "开启文件类型检查，并且载入与该类型对应的缩进规则。比如，如果编辑的是.py文件，Vim 就是会找 Python 的缩进规则~/.vim/indent/python.vim。
+
+set modifiable "设置可修改
 
 "set mouse=a "启用鼠标
 set nocompatible	"不与Vi兼容(采用Vim自己的操作指令)
@@ -286,7 +288,9 @@ Plug 'theniceboy/eleline.vim' "主题
 Plug 'ojroques/vim-scrollstatus' "当前页数滚动条
 
 " General Highlighter
-Plug 'RRethy/vim-hexokinase', { 'do': 'make hexokinase' } "显示rgb码 对应的颜色
+if g:os != "win"
+	Plug 'RRethy/vim-hexokinase', { 'do': 'make hexokinase' } "显示rgb码 对应的颜色
+endif
 Plug 'RRethy/vim-illuminate' "自动高亮光标下的其他相同单词
 
 " File navigation
@@ -1174,7 +1178,7 @@ let g:move_key_modifier = 'C'
 " ===
 " === any-jump
 " ===
-nnoremap j :AnyJump<CR>
+nnoremap cj :AnyJump<CR>
 let g:any_jump_window_width_ratio  = 0.8
 let g:any_jump_window_height_ratio = 0.9
 
@@ -1224,8 +1228,8 @@ let g:lazygit_use_neovim_remote = 1 " for neovim-remote support
 " ===
 "color dracula
 "color one
-color deus
 "color gruvbox
+color deus
 "let ayucolor="light"
 "color ayu
 "color xcodelighthc
