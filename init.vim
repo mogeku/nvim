@@ -4,24 +4,38 @@
 "| |  | | | |   | |\  | \ V /  | || |  | |  _ <| |___
 "|_|  |_| |_|   |_| \_|  \_/  |___|_|  |_|_| \_\\____|
 
-" Author: @theniceboy
+" Author: @momo
 
-" Checkout-list
-" vim-esearch
-" fmoralesc/worldslice
-" SidOfc/mkdx
 
+
+
+" ===
+" === Set global var for different system
+" ===
+if !exists("g:os")
+	if has("win64") || has("win32") || has("win16")
+		let g:os = "win"
+	else
+		let g:os = substitute(system('uname'), '\n', '', '')
+	endif
+endif
+
+if has("win64") || has("win32") || has("win16")
+	let $NVIM_HOME = $HOME/AppData/Local/nvim
+else
+	let $NVIM_HOME = $HOME/.config/nvim
+endif
 
 " ===
 " === Auto load for first time uses
 " ===
-if empty(glob($HOME.'/.config/nvim/autoload/plug.vim'))
-	silent !curl -fLo $HOME/.config/nvim/autoload/plug.vim --create-dirs
+if empty(glob($NVIM_HOME.'/autoload/plug.vim'))
+	silent !curl -fLo $NVIM_HOME/autoload/plug.vim --create-dirs
 				\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-if empty(glob($HOME.'/.config/nvim/plugged/wildfire.vim/autoload/wildfire.vim'))
+if empty(glob($NVIM_HOME.'/plugged/wildfire.vim/autoload/wildfire.vim'))
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
@@ -29,439 +43,296 @@ endif
 " === Create a _machine_specific.vim file to adjust machine specific stuff, like python interpreter location
 " ===
 let has_machine_specific_file = 1
-if empty(glob('~/.config/nvim/_machine_specific.vim'))
+if empty(glob($NVIM_HOME.'/_machine_specific.vim'))
 	let has_machine_specific_file = 0
-	silent! exec "!cp ~/.config/nvim/default_configs/_machine_specific_default.vim ~/.config/nvim/_machine_specific.vim"
+	silent! exec "!cp ".$NVIM_HOME."/default_configs/_machine_specific_default.vim ".$NVIM_HOME."/_machine_specific.vim"
 endif
 source $XDG_CONFIG_HOME/nvim/_machine_specific.vim
 
 
-" ====================
-" === Editor Setup ===
-" ====================
 " ===
 " === System
 " ===
 "set clipboard=unnamedplus
-let &t_ut=''
-set autochdir
+if g:os == "win"
+	set clipboard=unnamed           " set clipboard to unnamed to access the system clipboard under windows
+endif
+let &t_ut=''	"矫正终端部分配色
+set autochdir   "自动切换目录为当前目录
+
+set re=0
+
+" experimental
+set lazyredraw "性能考虑, 避免不必要的重绘
+"set regexpengine=1
 
 
 " ===
 " === Editor behavior
 " ===
-set exrc
-set secure
-set number
-set relativenumber
-set cursorline
-set hidden
-set noexpandtab
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
-set autoindent
-set list
-set listchars=tab:\|\ ,trail:▫
-set scrolloff=4
-set ttimeoutlen=0
-set notimeout
+filetype on	"侦测文件类型
+filetype indent on
+filetype plugin on	"载入文件类型插件
+filetype plugin indent on "开启文件类型检查，并且载入与该类型对应的缩进规则。比如，如果编辑的是.py文件，Vim 就是会找 Python 的缩进规则~/.vim/indent/python.vim。
+
+"set mouse=a "启用鼠标
+set nocompatible	"不与Vi兼容(采用Vim自己的操作指令)
+syntax on	"开启智能语义高亮
+set nocursorcolumn	"不要高亮显示当前列
+set cursorline	"高亮显示当前行
+"hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+set nu		"显示行号
+set rnu		"显示相对行号
+set showcmd	"输入的命令
+set wildmenu	"命令行模式下开启Tab自动补全功能
+set wildmode=full:list   " Better command line completion
+set nowrap	"过长的行自动分成几行显示
+set timeoutlen=400	"设置两个键直接的等待延迟
+set autochdir   "自动切换目录为当前目录
+set virtualedit=block,onemore   "允许光标出现在最后一个字符的后面
 set viewoptions=cursor,folds,slash,unix
-set wrap
-set tw=0
+
+"搜索相关设置
+set hlsearch	"高亮显示搜索项
+set incsearch	"搜索时进行实时搜索, 每输入一个字符就进行匹配
+set ignorecase	"搜索时忽略大小写
+set smartcase	"搜索时若有大写则严格匹配大写, 否则忽略大小写
+"每次进入Vim清空上一次的高亮搜索"
+exec "nohlsearch"
+
+"文字处理相关设置
+set expandtab   "使用空格来替换Tab
+set tabstop=4   "设置所有的Tab和缩进为4个空格
+set shiftwidth=4    "设定<<和>>命令移动时的宽度为4
+set softtabstop=4   "使得按退格键时可以一次删除4个空格
+set scrolloff=5    "光标移动到buffer的顶部和底部时保持5行距离
+set textwidth=0 "关闭输入文字时, 超过其值后输入空格自动换行
 set indentexpr=
-set foldmethod=indent
-set foldlevel=99
-set foldenable
-set formatoptions-=tc
-set splitright
-set splitbelow
-set noshowmode
-set showcmd
-set wildmenu
-set ignorecase
-set smartcase
-set shortmess+=c
-set inccommand=split
-set completeopt=longest,noinsert,menuone,noselect,preview
-set ttyfast "should make scrolling faster
-set lazyredraw "same as above
-set visualbell
-silent !mkdir -p $HOME/.config/nvim/tmp/backup
-silent !mkdir -p $HOME/.config/nvim/tmp/undo
-"silent !mkdir -p $HOME/.config/nvim/tmp/sessions
-set backupdir=$HOME/.config/nvim/tmp/backup,.
-set directory=$HOME/.config/nvim/tmp/backup,.
-if has('persistent_undo')
-	set undofile
-	set undodir=$HOME/.config/nvim/tmp/undo,.
-endif
-set colorcolumn=100
-set updatetime=100
-set virtualedit=block
+set backspace=indent,eol,start  "让退格键可以删除 indent(缩进), eol(行首, 合并两行), start(删除此次插入前的输入)
 
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-
-
-" ===
-" === Terminal Behaviors
-" ===
-let g:neoterm_autoscroll = 1
-autocmd TermOpen term://* startinsert
-tnoremap <C-N> <C-\><C-N>
-tnoremap <C-O> <C-\><C-N><C-O>
-
-
-" ===
-" === Basic Mappings
-" ===
-" Set <LEADER> as <SPACE>, ; as :
-let mapleader=" "
-noremap ; :
-
-" Save & quit
-noremap Q :q<CR>
-" noremap <C-q> :qa<CR>
-noremap S :w<CR>
-
-" Open the vimrc file anytime
-noremap <LEADER>rc :e $HOME/.config/nvim/init.vim<CR>
-noremap <LEADER>rv :e .nvimrc<CR>
-
-" Undo operations
-noremap l u
-
-" Insert Key
-noremap k i
-noremap K I
-
-" make Y to copy till the end of the line
-nnoremap Y y$
-
-" Copy to system clipboard
-vnoremap Y "+y
-
-" Indentation
-nnoremap < <<
-nnoremap > >>
-
-" Delete find pair
-nnoremap dy d%
-
-" Search
-noremap <LEADER><CR> :nohlsearch<CR>
-
-" Adjacent duplicate words
-noremap <LEADER>dw /\(\<\w\+\>\)\_s*\1
-
-" Space to Tab
-nnoremap <LEADER>tt :%s/    /\t/g
-vnoremap <LEADER>tt :s/    /\t/g
-
-" Folding
-noremap <silent> <LEADER>o za
-
-" nnoremap <c-n> :tabe<CR>:-tabmove<CR>:term lazynpm<CR>
-
-
-" ===
-" === Cursor Movement
-" ===
-" New cursor movement (the default arrow keys are used for resizing windows)
-"     ^
-"     u
-" < n   i >
-"     e
-"     v
-noremap <silent> u k
-noremap <silent> n h
-noremap <silent> e j
-noremap <silent> i l
-noremap <silent> gu gk
-noremap <silent> ge gj
-noremap <silent> \v v$h
-
-" U/E keys for 5 times u/e (faster navigation)
-noremap <silent> U 5k
-noremap <silent> E 5j
-
-" N key: go to the start of the line
-noremap <silent> N 0
-" I key: go to the end of the line
-noremap <silent> I $
-
-" Faster in-line navigation
-noremap W 5w
-noremap B 5b
-
-" set h (same as n, cursor left) to 'end of word'
-noremap h e
-
-" Ctrl + U or E will move up/down the view port without moving the cursor
-noremap <C-U> 5<C-y>
-noremap <C-E> 5<C-e>
-
-
-
-source $XDG_CONFIG_HOME/nvim/cursor.vim
-
-"If you use Qwerty keyboard, uncomment the next line.
-"source $XDG_CONFIG_HOME/nvim/cursor_for_qwerty.vim
-
-" ===
-" === Insert Mode Cursor Movement
-" ===
-inoremap <C-a> <ESC>A
-
-
-" ===
-" === Command Mode Cursor Movement
-" ===
-cnoremap <C-a> <Home>
-cnoremap <C-e> <End>
-cnoremap <C-p> <Up>
-cnoremap <C-n> <Down>
-cnoremap <C-b> <Left>
-cnoremap <C-f> <Right>
-cnoremap <M-b> <S-Left>
-cnoremap <M-w> <S-Right>
-
-
-" ===
-" === Searching
-" ===
-noremap - N
-noremap = n
-
-
-" ===
-" === Window management
-" ===
-" Use <space> + new arrow keys for moving the cursor around windows
-noremap <LEADER>w <C-w>w
-noremap <LEADER>u <C-w>k
-noremap <LEADER>e <C-w>j
-noremap <LEADER>n <C-w>h
-noremap <LEADER>i <C-w>l
-noremap qf <C-w>o
-
-" Disable the default s key
-noremap s <nop>
-
-" split the screens to up (horizontal), down (horizontal), left (vertical), right (vertical)
-noremap su :set nosplitbelow<CR>:split<CR>:set splitbelow<CR>
-noremap se :set splitbelow<CR>:split<CR>
-noremap sn :set nosplitright<CR>:vsplit<CR>:set splitright<CR>
-noremap si :set splitright<CR>:vsplit<CR>
-
-" Resize splits with arrow keys
-noremap <up> :res +5<CR>
-noremap <down> :res -5<CR>
-noremap <left> :vertical resize-5<CR>
-noremap <right> :vertical resize+5<CR>
-
-" Place the two screens up and down
-noremap sh <C-w>t<C-w>K
-" Place the two screens side by side
-noremap sv <C-w>t<C-w>H
-
-" Rotate screens
-noremap srh <C-w>b<C-w>K
-noremap srv <C-w>b<C-w>H
-
-" Press <SPACE> + q to close the window below the current window
-noremap <LEADER>q <C-w>j:q<CR>
-
-
-" ===
-" === Tab management
-" ===
-" Create a new tab with tu
-noremap tu :tabe<CR>
-noremap tU :tab split<CR>
-" Move around tabs with tn and ti
-noremap tn :-tabnext<CR>
-noremap ti :+tabnext<CR>
-" Move the tabs with tmn and tmi
-noremap tmn :-tabmove<CR>
-noremap tmi :+tabmove<CR>
-
-
-" ===
-" === Markdown Settings
-" ===
-" Snippets
-source $XDG_CONFIG_HOME/nvim/md-snippets.vim
-" auto spell
-autocmd BufRead,BufNewFile *.md setlocal spell
-
-
-" ===
-" === Other useful stuff
-" ===
-" Open a new instance of st with the cwd
-nnoremap \t :tabe<CR>:-tabmove<CR>:term sh -c 'st'<CR><C-\><C-N>:q<CR>
-
-" Opening a terminal window
-noremap <LEADER>/ :set splitbelow<CR>:split<CR>:res +10<CR>:term<CR>
-
-" Press space twice to jump to the next '<++>' and edit it
-noremap <LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>c4l
-
-" Spelling Check with <space>sc
-noremap <LEADER>sc :set spell!<CR>
-
-" Press ` to change case (instead of ~)
-noremap ` ~
-
-noremap <C-c> zz
-
-" Auto change directory to current dir
-autocmd BufEnter * silent! lcd %:p:h
-
-" Call figlet
-noremap tx :r !figlet 
-
-" find and replace
-noremap \s :%s//g<left><left>
-
-" set wrap
-noremap <LEADER>sw :set wrap<CR>
-
-" press f10 to show hlgroup
-function! SynGroup()
-	let l:s = synID(line('.'), col('.'), 1)
-	echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
-endfun
-map <F10> :call SynGroup()<CR>
-
-" Compile function
-noremap r :call CompileRunGcc()<CR>
-func! CompileRunGcc()
-	exec "w"
-	if &filetype == 'c'
-		exec "!g++ % -o %<"
-		exec "!time ./%<"
-	elseif &filetype == 'cpp'
-		set splitbelow
-		exec "!g++ -std=c++11 % -Wall -o %<"
-		:sp
-		:res -15
-		:term ./%<
-	elseif &filetype == 'cs'
-		set splitbelow
-		silent! exec "!mcs %"
-		:sp
-		:res -5
-		:term mono %<.exe
-	elseif &filetype == 'java'
-		set splitbelow
-		:sp
-		:res -5
-		term javac % && time java %<
-	elseif &filetype == 'sh'
-		:!time bash %
-	elseif &filetype == 'python'
-		set splitbelow
-		:sp
-		:term python3 %
-	elseif &filetype == 'html'
-		silent! exec "!".g:mkdp_browser." % &"
-	elseif &filetype == 'markdown'
-		exec "InstantMarkdownPreview"
-	elseif &filetype == 'tex'
-		silent! exec "VimtexStop"
-		silent! exec "VimtexCompile"
-	elseif &filetype == 'dart'
-		exec "CocCommand flutter.run -d ".g:flutter_default_device." ".g:flutter_run_args
-		silent! exec "CocCommand flutter.dev.openDevLog"
-	elseif &filetype == 'javascript'
-		set splitbelow
-		:sp
-		:term export DEBUG="INFO,ERROR,WARNING"; node --trace-warnings .
-	elseif &filetype == 'go'
-		set splitbelow
-		:sp
-		:term go run .
+"保存上次编辑时的 undo
+if g:os == "win"
+	silent !mkdir -p $HOME/AppData/Local/nvim/tmp/backup
+	silent !mkdir -p $HOME/AppData/Local/nvim/tmp/undo
+	"silent !mkdir -p $HOME/AppData/Local/nvim/tmp/sessions
+	set backupdir=$HOME/AppData/Local/nvim/tmp/backup,.
+	set directory=$HOME/AppData/Local/nvim/tmp/backup,.
+	if has('persistent_undo')
+		set undofile
+		set undodir=$HOME/AppData/Local/nvim/tmp/undo,.
 	endif
-endfunc
+else
+	silent !mkdir -p $NVIM_HOME/tmp/backup
+	silent !mkdir -p $NVIM_HOME/tmp/undo
+	"silent !mkdir -p $NVIM_HOME/tmp/sessions
+	set backupdir=$NVIM_HOME/tmp/backup,.
+	set directory=$NVIM_HOME/tmp/backup,.
+	if has('persistent_undo')
+		set undofile
+		set undodir=$NVIM_HOME/tmp/undo,.
+	endif
+endif
+
+"每次打开vim, 将光标移动到上一次编辑时的位置
+if has("autocmd")
+    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
 
 
 " ===
-" === Install Plugins with Vim-Plug
+" === Code fold
 " ===
+"激活折叠功能"
+set foldenable
+"set nofen（这个是关闭折叠功能）"
 
-call plug#begin('$HOME/.config/nvim/plugged')
+"设置按照语法方式折叠（可简写set fdm=XX）"
+"有6种折叠方法：
+"manual   手工定义折叠"
+"indent   更多的缩进表示更高级别的折叠"
+"expr     用表达式来定义折叠"
+"syntax   用语法高亮来定义折叠"
+"diff     对没有更改的文本进行折叠"
+"marker   对文中的标志进行折叠"
+set foldmethod=indent
+"set fdl=0（这个是不选用任何折叠方法）"
 
-" Plug 'LoricAndre/fzterm.nvim'
+"设置折叠区域的宽度"
+"如果不为0，则在屏幕左侧显示一个折叠标识列
+"分别用“-”和“+”来表示打开和关闭的折叠
+"set foldcolumn=0
 
-" Testing my own plugin
-" Plug 'theniceboy/vim-calc'
+"设置折叠层数为3"
+set foldlevel=99
 
-" Treesitter
+"设置为自动关闭折叠"
+"set foldclose=all
+
+"用空格键来代替zo和zc快捷键实现开关折叠"
+"zo O-pen a fold (打开折叠)
+"zc C-lose a fold (关闭折叠)
+"zf F-old creation (创建折叠)
+"nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
+
+
+" ===
+" === Encode setting
+" ===
+set encoding=utf-8
+set fencs=utf-8,gbk,utf-16,utf-32,ucs-bom
+set fileencoding=utf-8
+
+" ===
+" === Custom key map
+" ===
+"设定leader键为空格
+let mapleader=" "
+
+"括号的自动匹配
+"inoremap ' ''<LEFT>
+"inoremap " ""<LEFT>
+"inoremap ( ()<LEFT>
+"inoremap < <><LEFT>
+"inoremap [ []<LEFT>
+"inoremap { {}<LEFT>
+"inoremap {<CR> {<CR>}<ESC>O
+
+"输入模式下自由的左右移动
+inoremap <C-f> <RIGHT>
+inoremap <C-b> <LEFT>
+
+"上开空白行和下开空白行
+noremap <CR> o<ESC>k
+
+"当切换匹配项时, 将其居中显示
+noremap n nzz
+noremap N Nzz
+
+"设置 空格+回车 就清除所有高亮的匹配项
+noremap <LEADER><CR> :nohlsearch<CR>
+noremap <C-j> J
+noremap J 5j
+noremap K 5k
+noremap H 5h
+noremap L 5l
+
+"向右将当前文件分屏
+map <LEADER>sl :set splitright<CR>:vsp<CR>
+"向左将当前文件分屏
+map <LEADER>sh :set nosplitright<CR>:vsp<CR>
+"向下将当前文件分屏
+map <LEADER>sj :set splitbelow<CR>:sp<CR>
+"向上将当前文件分屏
+map <LEADER>sk :set nosplitbelow<CR>:sp<CR>
+
+"将快速在分屏的文件中移动, 将<C-w>替换为空格
+map <LEADER>l <C-w>l
+map <LEADER>h <C-w>h
+map <LEADER>j <C-w>j
+map <LEADER>k <C-w>k
+
+"将设置分屏大小设置为 方向键
+map <up> :res +5<CR>
+map <down> :res -5<CR>
+map <left> :vertical res -5<CR>
+map <right> :vertical res +5<CR>
+
+"打开新的标签页
+map to :tabe<CR>
+map th :tabp<CR>
+map tl :tabn<CR>
+
+"buffer设置
+noremap bh :bp<CR>
+noremap bl :bn<CR>
+noremap b0 :bfirst<CR>
+"打开我的vimrc设置
+if g:os == "win"
+	if has("nvim")
+		map ts :tabe $HOME/AppData/Local/nvim/init.vim<CR>
+	else
+		map ts:tabe $HOME/.vim/_vimrc
+	endif
+else
+	if has("nvim")
+		map ts :tabe $HOME/.config/nvim/init.vim<CR>
+	else
+		map ts:tabe $HOME/.vim/.vimrc
+	endif
+endif
+
+
+
+" ===
+" === Plugin load
+" ===
+call plug#begin('~/.vim/plugged')
+
+" Editor dress
+"Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline-themes'
+"Plug 'joshdick/onedark.vim'
+
+" Treesitter 代码高亮
 Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-treesitter/playground'
 
-" Pretty Dress
+" Pretty Dress 主题
 Plug 'theniceboy/nvim-deus'
 "Plug 'arzg/vim-colors-xcode'
 
-" Status line
-Plug 'theniceboy/eleline.vim'
-Plug 'ojroques/vim-scrollstatus'
+" Status line 底部状态栏
+Plug 'theniceboy/eleline.vim' "主题
+Plug 'ojroques/vim-scrollstatus' "当前页数滚动条
 
 " General Highlighter
-Plug 'RRethy/vim-hexokinase', { 'do': 'make hexokinase' }
-Plug 'RRethy/vim-illuminate'
+Plug 'RRethy/vim-hexokinase', { 'do': 'make hexokinase' } "显示rgb码 对应的颜色
+Plug 'RRethy/vim-illuminate' "自动高亮光标下的其他相同单词
 
 " File navigation
 "Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 "Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
-Plug 'kevinhwang91/rnvimr'
-Plug 'airblade/vim-rooter'
-Plug 'pechorin/any-jump.vim'
+Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' } "浮窗模糊查找
+Plug 'kevinhwang91/rnvimr' "浮窗ranger
+Plug 'airblade/vim-rooter' "自动更改工作目录为当前vim打开文件目录
+Plug 'pechorin/any-jump.vim' "自动跳转定义
 
 " Taglist
-Plug 'liuchengxu/vista.vim'
+Plug 'liuchengxu/vista.vim' "显示搜索LSP符号,tags
 
-" Debugger
+" Debugger "调试, 暂时不用, 暂时使用pycharm
 " Plug 'puremourning/vimspector', {'do': './install_gadget.py --enable-c --enable-python --enable-go'}
 
 " Auto Complete
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'neoclide/coc.nvim', {'branch': 'release', 'tag': 'v0.0.79'}
-Plug 'wellle/tmux-complete.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'} "自动补全
+"Plug 'neoclide/coc.nvim', {'branch': 'release', 'tag': 'v0.0.79'}
+"Plug 'wellle/tmux-complete.vim' "查找tmux其他窗口中的字符串来补全
 
 " Snippets
-" Plug 'SirVer/ultisnips'
-Plug 'theniceboy/vim-snippets'
+Plug 'SirVer/ultisnips'
+"Plug 'theniceboy/vim-snippets'
 
 " Undo Tree
-Plug 'mbbill/undotree'
+Plug 'mbbill/undotree' "显示撤回的记录 Shift+L
 
 " Git
-Plug 'theniceboy/vim-gitignore', { 'for': ['gitignore', 'vim-plug'] }
-Plug 'theniceboy/fzf-gitignore', { 'do': ':UpdateRemotePlugins' }
+Plug 'theniceboy/vim-gitignore', { 'for': ['gitignore', 'vim-plug'] } "gitignore的语法高亮
+Plug 'theniceboy/fzf-gitignore', { 'do': ':UpdateRemotePlugins' } "通过fzf来创建gitignore gi
 "Plug 'mhinz/vim-signify'
-Plug 'airblade/vim-gitgutter'
-Plug 'cohama/agit.vim'
-Plug 'kdheepak/lazygit.nvim'
+Plug 'airblade/vim-gitgutter' "显示当前行在git中的不同
+Plug 'cohama/agit.vim' "以gitk的方式来查看commit :Agit
+Plug 'kdheepak/lazygit.nvim' "打开lazygit, 以gui的方式来使用git
 
-" Tex
-" Plug 'lervag/vimtex'
-
-" CSharp
-Plug 'OmniSharp/omnisharp-vim'
-Plug 'ctrlpvim/ctrlp.vim' , { 'for': ['cs', 'vim-plug'] } " omnisharp-vim dependency
+" LaTex
+" Plug 'lervag/vimtex' "查看LaTex文件
 
 " HTML, CSS, JavaScript, Typescript, PHP, JSON, etc.
-Plug 'elzr/vim-json'
-Plug 'neoclide/jsonc.vim'
+Plug 'elzr/vim-json' "Json高亮
+"Plug 'neoclide/jsonc.vim' "cJSON(c语言的json解析器) 的语法高亮
 Plug 'othree/html5.vim'
-Plug 'alvan/vim-closetag'
+Plug 'alvan/vim-closetag' "html自动输入闭合标签
 " Plug 'hail2u/vim-css3-syntax' " , { 'for': ['vim-plug', 'php', 'html', 'javascript', 'css', 'less'] }
 " Plug 'spf13/PIV', { 'for' :['php', 'vim-plug'] }
 " Plug 'pangloss/vim-javascript', { 'for': ['vim-plug', 'php', 'html', 'javascript', 'css', 'less'] }
@@ -469,7 +340,7 @@ Plug 'yuezk/vim-js', { 'for': ['vim-plug', 'php', 'html', 'javascript', 'css', '
 " Plug 'MaxMEllon/vim-jsx-pretty', { 'for': ['vim-plug', 'php', 'html', 'javascript', 'css', 'less'] }
 " Plug 'jelera/vim-javascript-syntax', { 'for': ['vim-plug', 'php', 'html', 'javascript', 'css', 'less'] }
 "Plug 'jaxbot/browserlink.vim'
-Plug 'HerringtonDarkholme/yats.vim'
+Plug 'HerringtonDarkholme/yats.vim' "TypeScript 语法
 " Plug 'posva/vim-vue'
 " Plug 'evanleck/vim-svelte', {'branch': 'main'}
 " Plug 'leafOfTree/vim-svelte-plugin'
@@ -478,8 +349,8 @@ Plug 'MaxMEllon/vim-jsx-pretty'
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
-Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
-Plug 'pantharshit00/vim-prisma'
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' } "ES6 CSS 语法,预览
+Plug 'pantharshit00/vim-prisma' 
 
 " Go
 Plug 'fatih/vim-go' , { 'for': ['go', 'vim-plug'], 'tag': '*' }
@@ -507,7 +378,6 @@ Plug 'mzlogin/vim-markdown-toc', { 'for': ['gitignore', 'markdown', 'vim-plug'] 
 Plug 'dkarter/bullets.vim'
 
 " Other filetypes
-" Plug 'jceb/vim-orgmode', {'for': ['vim-plug', 'org']}
 
 " Editor Enhancement
 "Plug 'Raimondi/delimitMate'
@@ -520,7 +390,7 @@ Plug 'gcmt/wildfire.vim' " in Visual mode, type k' to select all text in '', or 
 Plug 'junegunn/vim-after-object' " da= to delete what's after =
 Plug 'godlygeek/tabular' " ga, or :Tabularize <regex> to align
 Plug 'tpope/vim-capslock'	" Ctrl+L (insert) to toggle capslock
-Plug 'easymotion/vim-easymotion'
+Plug 'easymotion/vim-easymotion' "快速跳转
 " Plug 'Konfekt/FastFold'
 "Plug 'junegunn/vim-peekaboo'
 "Plug 'wellle/context.vim'
@@ -542,7 +412,7 @@ Plug 'junegunn/goyo.vim'
 " Plug 'MattesGroeger/vim-bookmarks'
 
 " Find & Replace
-Plug 'brooth/far.vim', { 'on': ['F', 'Far', 'Fardo'] }
+Plug 'brooth/far.vim', { 'on': ['F', 'Far', 'Fardo'] } "<LEADER>f
 
 " Documentation
 "Plug 'KabbAmine/zeavim.vim' " <LEADER>z to find doc
@@ -550,11 +420,11 @@ Plug 'brooth/far.vim', { 'on': ['F', 'Far', 'Fardo'] }
 " Mini Vim-APP
 "Plug 'jceb/vim-orgmode'
 "Plug 'mhinz/vim-startify'
-Plug 'skywind3000/asynctasks.vim'
+Plug 'skywind3000/asynctasks.vim' "为 Vim 引入类似 vscode 的 tasks 任务系统，用统一的方式系统化解决各类：编译/运行/测试/部署任务。
 Plug 'skywind3000/asyncrun.vim'
 
 " Vim Applications
-Plug 'itchyny/calendar.vim'
+"Plug 'itchyny/calendar.vim'
 
 " Other visual enhancement
 Plug 'luochen1990/rainbow'
@@ -575,38 +445,22 @@ Plug 'lambdalisue/suda.vim' " do stuff like :sudowrite
 
 
 call plug#end()
-set re=0
-
-" experimental
-set lazyredraw
-"set regexpengine=1
-
-
-" ===
-" === Dress up my vim
-" ===
-set termguicolors " enable true colors support
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-"set background=dark
-"let ayucolor="mirage"
-"let g:oceanic_next_terminal_bold = 1
-"let g:oceanic_next_terminal_italic = 1
-"let g:one_allow_italics = 1
-
-"color dracula
-"color one
-color deus
-"color gruvbox
-"let ayucolor="light"
-"color ayu
-"color xcodelighthc
-"set background=light
-"set cursorcolumn
-
-hi NonText ctermfg=gray guifg=grey10
-"hi SpecialKey ctermfg=blue guifg=grey70
 
 " ===================== Start of Plugin Settings =====================
+
+" ===
+" === vim-airline
+" ===
+"let g:airline_powerline_fonts=1
+"let g:airline#extensions#tabline#enabled = 1
+"let g:airline#extensions#tabline#buffer_nr_show = 1
+"let g:airline_theme='onedark'
+"set laststatus=2	"设置状态行显示在倒数第2行
+
+" ===
+" === onedark
+" ===
+"colorscheme onedark
 
 
 " ===
@@ -689,55 +543,68 @@ function! Show_documentation()
 		call CocAction('doHover')
 	endif
 endfunction
-nnoremap <LEADER>h :call Show_documentation()<CR>
-" set runtimepath^=~/.config/nvim/coc-extensions/coc-flutter-tools/
+"nnoremap <LEADER>h :call Show_documentation()<CR>
+
+" set runtimepath^=$NVIM_HOME/coc-extensions/coc-flutter-tools/
 " let g:coc_node_args = ['--nolazy', '--inspect-brk=6045']
 " let $NVIM_COC_LOG_LEVEL = 'debug'
 " let $NVIM_COC_LOG_FILE = '/Users/david/Desktop/log.txt'
 
-nnoremap <silent><nowait> <LEADER>d :CocList diagnostics<cr>
-nmap <silent> <LEADER>- <Plug>(coc-diagnostic-prev)
-nmap <silent> <LEADER>= <Plug>(coc-diagnostic-next)
-nnoremap <c-c> :CocCommand<CR>
+"nnoremap <silent><nowait> <LEADER>d :CocList diagnostics<cr>
+"nmap <silent> <LEADER>- <Plug>(coc-diagnostic-prev)
+"nmap <silent> <LEADER>= <Plug>(coc-diagnostic-next)
+"nnoremap <c-c> :CocCommand<CR>
 " Text Objects
-xmap kf <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap kf <Plug>(coc-funcobj-i)
-omap af <Plug>(coc-funcobj-a)
-xmap kc <Plug>(coc-classobj-i)
-omap kc <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
+"xmap kf <Plug>(coc-funcobj-i)
+"xmap af <Plug>(coc-funcobj-a)
+"omap kf <Plug>(coc-funcobj-i)
+"omap af <Plug>(coc-funcobj-a)
+"xmap kc <Plug>(coc-classobj-i)
+"omap kc <Plug>(coc-classobj-i)
+"xmap ac <Plug>(coc-classobj-a)
+"omap ac <Plug>(coc-classobj-a)
 " Useful commands
-nnoremap <silent> <space>y :<C-u>CocList -A --normal yank<cr>
+"打开历史剪切板
+nnoremap <silent> <space>y :<C-u>CocList -A --normal yank<cr> 
+"列出定义列表 
 nmap <silent> gd <Plug>(coc-definition)
+"分屏列出定义列表 
 nmap <silent> gD :tab sp<CR><Plug>(coc-definition)
+"转至类型定义
 nmap <silent> gy <Plug>(coc-type-definition)
 " nmap <silent> gi <Plug>(coc-implementation)
+"列出应用
 nmap <silent> gr <Plug>(coc-references)
+"重命名
 nmap <leader>rn <Plug>(coc-rename)
+
+"打开文件浏览器
 nmap tt :CocCommand explorer<CR>
-" coc-translator
+" coc-translator 翻译单词
 nmap ts <Plug>(coc-translator-p)
+
 " Remap for do codeAction of selected region
 function! s:cocActionsOpenFromSelected(type) abort
   execute 'CocCommand actions.open ' . a:type
 endfunction
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>aw  <Plug>(coc-codeaction-selected)w
+"xmap <leader>a  <Plug>(coc-codeaction-selected)
+"nmap <leader>aw  <Plug>(coc-codeaction-selected)w
+
 " coctodolist
 " nnoremap <leader>tn :CocCommand todolist.create<CR>
 " nnoremap <leader>tl :CocList todolist<CR>
 " nnoremap <leader>tu :CocCommand todolist.download<CR>:CocCommand todolist.upload<CR>
+
 " coc-tasks
 noremap <silent> <leader>ts :CocList tasks<CR>
+
 " coc-snippets
 imap <C-l> <Plug>(coc-snippets-expand)
 vmap <C-e> <Plug>(coc-snippets-select)
 let g:coc_snippet_next = '<c-e>'
 let g:coc_snippet_prev = '<c-n>'
 imap <C-e> <Plug>(coc-snippets-expand-jump)
-let g:snips_author = 'David Chen'
+let g:snips_author = 'Lee'
 autocmd BufRead,BufNewFile tsconfig.json set filetype=jsonc
 
 
@@ -756,6 +623,7 @@ let g:instant_markdown_autoscroll = 1
 " ===
 " === vim-table-mode
 " ===
+"开关表格模式
 noremap <LEADER>tm :TableModeToggle<CR>
 "let g:table_mode_disable_mappings = 1
 let g:table_mode_cell_text_object_i_map = 'k<Bar>'
@@ -764,14 +632,19 @@ let g:table_mode_cell_text_object_i_map = 'k<Bar>'
 " ===
 " === FZF
 " ===
+"模糊查找文件
 nnoremap <c-p> :Leaderf file<CR>
 " noremap <silent> <C-p> :Files<CR>
+"模糊查找文件内容
 noremap <silent> <C-f> :Rg<CR>
+"模糊查找历史文件
 noremap <silent> <C-h> :History<CR>
-"noremap <C-t> :BTags<CR>
+"模糊查找标签
+noremap <C-t> :BTags<CR>
 " noremap <silent> <C-l> :Lines<CR>
+"模糊查找缓冲区
 noremap <silent> <C-w> :Buffers<CR>
-noremap <leader>; :History:<CR>
+"noremap <leader>; :History:<CR>
 
 let g:fzf_preview_window = 'right:60%'
 let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
@@ -793,13 +666,13 @@ command! BD call fzf#run(fzf#wrap({
   \ 'options': '--multi --reverse --bind ctrl-a:select-all+accept'
 \ }))
 
-noremap <c-d> :BD<CR>
+"noremap <c-d> :BD<CR>
 
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
 
 
 " ===
-" === Leaderf
+" === LeaderF
 " ===
 " let g:Lf_WindowPosition = 'popup'
 let g:Lf_PreviewInPopup = 1
@@ -820,13 +693,6 @@ let g:Lf_WildIgnore = {
         \}
 let g:Lf_UseMemoryCache = 0
 let g:Lf_UseCache = 0
-
-
-" ===
-" === CTRLP (Dependency for omnisharp)
-" ===
-let g:ctrlp_map = ''
-let g:ctrlp_cmd = 'CtrlP'
 
 
 " ===
@@ -966,18 +832,18 @@ noremap <LEADER>gi :FzfGitignore<CR>
 " ===
 " === Ultisnips
 " ===
-" let g:tex_flavor = "latex"
-" inoremap <c-n> <nop>
-" let g:UltiSnipsExpandTrigger="<c-e>"
-" let g:UltiSnipsJumpForwardTrigger="<c-e>"
-" let g:UltiSnipsJumpBackwardTrigger="<c-n>"
-" let g:UltiSnipsSnippetDirectories = [$HOME.'/.config/nvim/Ultisnips/', $HOME.'/.config/nvim/plugged/vim-snippets/UltiSnips/']
-" silent! au BufEnter,BufRead,BufNewFile * silent! unmap <c-r>
-" " Solve extreme insert-mode lag on macOS (by disabling autotrigger)
-" augroup ultisnips_no_auto_expansion
-"     au!
-"     au VimEnter * au! UltiSnips_AutoTrigger
-" augroup END
+let g:tex_flavor = "latex"
+inoremap <c-n> <nop>
+let g:UltiSnipsExpandTrigger="<c-e>"
+let g:UltiSnipsJumpForwardTrigger="<c-e>"
+let g:UltiSnipsJumpBackwardTrigger="<c-n>"
+let g:UltiSnipsSnippetDirectories = [$NVIM_HOME.'/Ultisnips/', $NVIM_HOME.'/plugged/vim-snippets/UltiSnips/']
+silent! au BufEnter,BufRead,BufNewFile * silent! unmap <c-r>
+" Solve extreme insert-mode lag on macOS (by disabling autotrigger)
+augroup ultisnips_no_auto_expansion
+    au!
+    au VimEnter * au! UltiSnips_AutoTrigger
+augroup END
 
 
 
@@ -996,26 +862,26 @@ let maplocalleader=' '
 " === vim-calendar
 " ===
 "noremap \c :Calendar -position=here<CR>
-noremap \\ :Calendar -view=clock -position=here<CR>
-let g:calendar_google_calendar = 1
-let g:calendar_google_task = 1
-augroup calendar-mappings
-	autocmd!
-	" diamond cursor
-	autocmd FileType calendar nmap <buffer> u <Plug>(calendar_up)
-	autocmd FileType calendar nmap <buffer> n <Plug>(calendar_left)
-	autocmd FileType calendar nmap <buffer> e <Plug>(calendar_down)
-	autocmd FileType calendar nmap <buffer> i <Plug>(calendar_right)
-	autocmd FileType calendar nmap <buffer> <c-u> <Plug>(calendar_move_up)
-	autocmd FileType calendar nmap <buffer> <c-n> <Plug>(calendar_move_left)
-	autocmd FileType calendar nmap <buffer> <c-e> <Plug>(calendar_move_down)
-	autocmd FileType calendar nmap <buffer> <c-i> <Plug>(calendar_move_right)
-	autocmd FileType calendar nmap <buffer> k <Plug>(calendar_start_insert)
-	autocmd FileType calendar nmap <buffer> K <Plug>(calendar_start_insert_head)
-	" unmap <C-n>, <C-p> for other plugins
-	autocmd FileType calendar nunmap <buffer> <C-n>
-	autocmd FileType calendar nunmap <buffer> <C-p>
-augroup END
+"noremap \\ :Calendar -view=clock -position=here<CR>
+"let g:calendar_google_calendar = 1
+"let g:calendar_google_task = 1
+"augroup calendar-mappings
+"	autocmd!
+"	" diamond cursor
+"	autocmd FileType calendar nmap <buffer> u <Plug>(calendar_up)
+"	autocmd FileType calendar nmap <buffer> n <Plug>(calendar_left)
+"	autocmd FileType calendar nmap <buffer> e <Plug>(calendar_down)
+"	autocmd FileType calendar nmap <buffer> i <Plug>(calendar_right)
+"	autocmd FileType calendar nmap <buffer> <c-u> <Plug>(calendar_move_up)
+"	autocmd FileType calendar nmap <buffer> <c-n> <Plug>(calendar_move_left)
+"	autocmd FileType calendar nmap <buffer> <c-e> <Plug>(calendar_move_down)
+"	autocmd FileType calendar nmap <buffer> <c-i> <Plug>(calendar_move_right)
+"	autocmd FileType calendar nmap <buffer> k <Plug>(calendar_start_insert)
+"	autocmd FileType calendar nmap <buffer> K <Plug>(calendar_start_insert_head)
+"	" unmap <C-n>, <C-p> for other plugins
+"	autocmd FileType calendar nunmap <buffer> <C-n>
+"	autocmd FileType calendar nunmap <buffer> <C-p>
+"augroup END
 
 
 " ===
@@ -1053,23 +919,23 @@ let g:go_doc_keywordprg_enabled = 0
 " ===
 " === OmniSharp
 " ===
-let g:OmniSharp_typeLookupInPreview = 1
-let g:omnicomplete_fetch_full_documentation = 1
+"let g:OmniSharp_typeLookupInPreview = 1
+"let g:omnicomplete_fetch_full_documentation = 1
 
-let g:OmniSharp_server_use_mono = 1
-let g:OmniSharp_server_stdio = 1
-let g:OmniSharp_highlight_types = 2
-let g:OmniSharp_selector_ui = 'ctrlp'
+"let g:OmniSharp_server_use_mono = 1
+"let g:OmniSharp_server_stdio = 1
+"let g:OmniSharp_highlight_types = 2
+"let g:OmniSharp_selector_ui = 'ctrlp'
 
-autocmd Filetype cs nnoremap <buffer> gd :OmniSharpPreviewDefinition<CR>
-autocmd Filetype cs nnoremap <buffer> gr :OmniSharpFindUsages<CR>
-autocmd Filetype cs nnoremap <buffer> gy :OmniSharpTypeLookup<CR>
-autocmd Filetype cs nnoremap <buffer> ga :OmniSharpGetCodeActions<CR>
-autocmd Filetype cs nnoremap <buffer> <LEADER>rn :OmniSharpRename<CR><C-N>:res +5<CR>
+"autocmd Filetype cs nnoremap <buffer> gd :OmniSharpPreviewDefinition<CR>
+"autocmd Filetype cs nnoremap <buffer> gr :OmniSharpFindUsages<CR>
+"autocmd Filetype cs nnoremap <buffer> gy :OmniSharpTypeLookup<CR>
+"autocmd Filetype cs nnoremap <buffer> ga :OmniSharpGetCodeActions<CR>
+"autocmd Filetype cs nnoremap <buffer> <LEADER>rn :OmniSharpRename<CR><C-N>:res +5<CR>
 
-sign define OmniSharpCodeActions text=💡
+"sign define OmniSharpCodeActions text=💡
 
-let g:coc_sources_disable_map = { 'cs': ['cs', 'cs-1', 'cs-2', 'cs-3'] }
+"let g:coc_sources_disable_map = { 'cs': ['cs', 'cs-1', 'cs-2', 'cs-3'] }
 
 " ===
 " === vim-easymotion
@@ -1156,7 +1022,7 @@ noremap \p :echo expand('%:p')<CR>
 " ===
 " === vim-session
 " ===
-"let g:session_directory = $HOME."/.config/nvim/tmp/sessions"
+"let g:session_directory = $NVIM_HOME."/tmp/sessions"
 "let g:session_autosave = 'no'
 "let g:session_autoload = 'no'
 "let g:session_command_aliases = 1
@@ -1164,7 +1030,7 @@ noremap \p :echo expand('%:p')<CR>
 "set sessionoptions-=options
 "noremap sl :OpenSession<CR>
 "noremap sS :SaveSession<CR>
-"noremap ss :SaveSession 
+"noremap ss :SaveSession
 "noremap sc :SaveSession<CR>:CloseSession<CR>:q<CR>
 "noremap so :OpenSession default<CR>
 "noremap sD :DeleteSession<CR>
@@ -1188,20 +1054,20 @@ cnoreabbrev sw w suda://%
 " ===
 " === vimspector
 " ===
-let g:vimspector_enable_mappings = 'HUMAN'
-function! s:read_template_into_buffer(template)
-	" has to be a function to avoid the extra space fzf#run insers otherwise
-	execute '0r ~/.config/nvim/sample_vimspector_json/'.a:template
-endfunction
-command! -bang -nargs=* LoadVimSpectorJsonTemplate call fzf#run({
-			\   'source': 'ls -1 ~/.config/nvim/sample_vimspector_json',
-			\   'down': 20,
-			\   'sink': function('<sid>read_template_into_buffer')
-			\ })
-" noremap <leader>vs :tabe .vimspector.json<CR>:LoadVimSpectorJsonTemplate<CR>
-sign define vimspectorBP text=☛ texthl=Normal
-sign define vimspectorBPDisabled text=☞ texthl=Normal
-sign define vimspectorPC text=🔶 texthl=SpellBad
+"let g:vimspector_enable_mappings = 'HUMAN'
+"function! s:read_template_into_buffer(template)
+"	" has to be a function to avoid the extra space fzf#run insers otherwise
+"	execute '0r ~/.config/nvim/sample_vimspector_json/'.a:template
+"endfunction
+"command! -bang -nargs=* LoadVimSpectorJsonTemplate call fzf#run({
+"			\   'source': 'ls -1 ~/.config/nvim/sample_vimspector_json',
+"			\   'down': 20,
+"			\   'sink': function('<sid>read_template_into_buffer')
+"			\ })
+"" noremap <leader>vs :tabe .vimspector.json<CR>:LoadVimSpectorJsonTemplate<CR>
+"sign define vimspectorBP text=☛ texthl=Normal
+"sign define vimspectorBPDisabled text=☞ texthl=Normal
+"sign define vimspectorPC text=🔶 texthl=SpellBad
 
 
 " ===
@@ -1352,9 +1218,42 @@ let g:lazygit_use_neovim_remote = 1 " for neovim-remote support
 
 " ===================== End of Plugin Settings =====================
 
+
 " ===
-" === Terminal Colors
+" === Dress up my vim
 " ===
+"color dracula
+"color one
+color deus
+"color gruvbox
+"let ayucolor="light"
+"color ayu
+"color xcodelighthc
+"set background=light
+"set cursorcolumn
+
+hi NonText ctermfg=gray guifg=grey10
+"hi SpecialKey ctermfg=blue guifg=grey70
+
+
+" ===
+" === Terminal color config
+" ===
+"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
+"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
+if (empty($TMUX))
+  if (has("nvim"))
+    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  endif
+  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+  if (has("termguicolors"))
+    set termguicolors
+  endif
+endif
 
 let g:terminal_color_0  = '#000000'
 let g:terminal_color_1  = '#FF5555'
@@ -1381,6 +1280,6 @@ exec "nohlsearch"
 
 " Open the _machine_specific.vim file if it has just been created
 if has_machine_specific_file == 0
-	exec "e ~/.config/nvim/_machine_specific.vim"
+	exec "e ".$NVIM_HOME."/_machine_specific.vim"
 endif
 
