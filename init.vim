@@ -228,10 +228,10 @@ map <LEADER>sj :set splitbelow<CR>:sp<CR>
 map <LEADER>sk :set nosplitbelow<CR>:sp<CR>
 
 "将快速在分屏的文件中移动, 将<C-w>替换为空格
-map <LEADER>l <C-w>l
-map <LEADER>h <C-w>h
-map <LEADER>j <C-w>j
-map <LEADER>k <C-w>k
+noremap <LEADER>l <C-w>l
+noremap <LEADER>h <C-w>h
+noremap <LEADER>j <C-w>j
+noremap <LEADER>k <C-w>k
 
 "将设置分屏大小设置为 方向键
 map <up> :res +5<CR>
@@ -262,8 +262,6 @@ else
 		map ts:tabe $HOME/.vim/.vimrc
 	endif
 endif
-
-
 
 " ===
 " === Plugin load
@@ -387,7 +385,7 @@ Plug 'dkarter/bullets.vim'
 "Plug 'Raimondi/delimitMate'
 Plug 'jiangmiao/auto-pairs'
 Plug 'mg979/vim-visual-multi'
-Plug 'tomtom/tcomment_vim' " in <space>cn to comment a line
+Plug 'tomtom/tcomment_vim' " in <space>c to comment a line
 Plug 'theniceboy/antovim' " gs to switch
 Plug 'tpope/vim-surround' " type yskw' to wrap the word with '' or type cs'` to change 'word' to `word`
 Plug 'gcmt/wildfire.vim' " in Visual mode, type k' to select all text in '', or type k) k] k} kp
@@ -449,6 +447,7 @@ Plug 'lambdalisue/suda.vim' " do stuff like :sudowrite
 
 
 call plug#end()
+
 
 " ===================== Start of Plugin Settings =====================
 
@@ -1163,10 +1162,10 @@ let g:dartfmt_options = ["-l 100"]
 " ===
 nnoremap ci cl
 let g:tcomment_textobject_inlinecomment = ''
-nmap <LEADER>cn g>c
-vmap <LEADER>cn g>
-nmap <LEADER>cu g<c
-vmap <LEADER>cu g<
+nmap <LEADER>c g>c
+vmap <LEADER>c g>
+nmap <LEADER>u g<c
+vmap <LEADER>u g<
 
 
 " ===
@@ -1179,8 +1178,9 @@ let g:move_key_modifier = 'C'
 " === any-jump
 " ===
 nnoremap cj :AnyJump<CR>
-let g:any_jump_window_width_ratio  = 0.8
+let g:any_jump_disable_default_keybindings = 1
 let g:any_jump_window_height_ratio = 0.9
+let g:any_jump_window_width_ratio  = 0.8
 
 
 " ===
@@ -1286,4 +1286,5 @@ exec "nohlsearch"
 if has_machine_specific_file == 0
 	exec "e ".$NVIM_HOME."/_machine_specific.vim"
 endif
+
 
