@@ -30,8 +30,13 @@ endif
 " === Auto load for first time uses
 " ===
 if empty(glob($NVIM_HOME.'/autoload/plug.vim'))
-	silent !curl -fLo $NVIM_HOME/autoload/plug.vim --create-dirs
-				\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	if g:os == "win"
+		silent !curl -fLo AppData/Local/nvim/autoload/plug.vim --create-dirs
+					\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	else
+		silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+					\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	endif
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
@@ -1228,22 +1233,6 @@ let g:lazygit_use_neovim_remote = 1 " for neovim-remote support
 " ===================== End of Plugin Settings =====================
 
 
-" ===
-" === Dress up my vim
-" ===
-"color dracula
-"color one
-"color gruvbox
-color deus
-"let ayucolor="light"
-"color ayu
-"color xcodelighthc
-"set background=light
-"set cursorcolumn
-
-hi NonText ctermfg=gray guifg=grey10
-"hi SpecialKey ctermfg=blue guifg=grey70
-
 
 " ===
 " === Terminal color config
@@ -1280,6 +1269,21 @@ let g:terminal_color_12 = '#CAA9FA'
 let g:terminal_color_13 = '#FF92D0'
 let g:terminal_color_14 = '#9AEDFE'
 
+" ===
+" === Dress up my vim
+" ===
+"color dracula
+"color one
+"color gruvbox
+color deus
+"let ayucolor="light"
+"color ayu
+"color xcodelighthc
+"set background=light
+"set cursorcolumn
+
+hi NonText ctermfg=gray guifg=grey10
+"hi SpecialKey ctermfg=blue guifg=grey70
 
 " ===
 " === Necessary Commands to Execute
