@@ -298,7 +298,9 @@ Plug 'RRethy/vim-illuminate' "自动高亮光标下的其他相同单词
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' } "浮窗模糊查找
-Plug 'kevinhwang91/rnvimr' "浮窗ranger
+if g:os != "win"
+    Plug 'kevinhwang91/rnvimr' "浮窗ranger
+endif
 Plug 'airblade/vim-rooter' "自动更改工作目录为当前vim打开文件目录
 Plug 'pechorin/any-jump.vim' "自动跳转定义
 
@@ -1095,26 +1097,28 @@ let g:vmt_fence_closing_text = '/TOC'
 " ===
 " === rnvimr
 " ===
-let g:rnvimr_ex_enable = 1
-let g:rnvimr_pick_enable = 1
-let g:rnvimr_draw_border = 0
-" let g:rnvimr_bw_enable = 1
-highlight link RnvimrNormal CursorLine
-nnoremap <silent> R :RnvimrToggle<CR><C-\><C-n>:RnvimrResize 0<CR>
-let g:rnvimr_action = {
-            \ '<C-t>': 'NvimEdit tabedit',
-            \ '<C-x>': 'NvimEdit split',
-            \ '<C-v>': 'NvimEdit vsplit',
-            \ 'gw': 'JumpNvimCwd',
-            \ 'yw': 'EmitRangerCwd'
-            \ }
-let g:rnvimr_layout = { 'relative': 'editor',
-            \ 'width': &columns,
-            \ 'height': &lines,
-            \ 'col': 0,
-            \ 'row': 0,
-            \ 'style': 'minimal' }
-let g:rnvimr_presets = [{'width': 1.0, 'height': 1.0}]
+if g:os != "win"
+    let g:rnvimr_ex_enable = 1
+    let g:rnvimr_pick_enable = 1
+    let g:rnvimr_draw_border = 0
+    " let g:rnvimr_bw_enable = 1
+    highlight link RnvimrNormal CursorLine
+    nnoremap <silent> R :RnvimrToggle<CR><C-\><C-n>:RnvimrResize 0<CR>
+    let g:rnvimr_action = {
+                \ '<C-t>': 'NvimEdit tabedit',
+                \ '<C-x>': 'NvimEdit split',
+                \ '<C-v>': 'NvimEdit vsplit',
+                \ 'gw': 'JumpNvimCwd',
+                \ 'yw': 'EmitRangerCwd'
+                \ }
+    let g:rnvimr_layout = { 'relative': 'editor',
+                \ 'width': &columns,
+                \ 'height': &lines,
+                \ 'col': 0,
+                \ 'row': 0,
+                \ 'style': 'minimal' }
+    let g:rnvimr_presets = [{'width': 1.0, 'height': 1.0}]
+endif
 
 
 " ===
