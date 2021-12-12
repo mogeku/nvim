@@ -251,15 +251,15 @@ noremap b0 :bfirst<CR>
 "打开我的vimrc设置
 if g:os == "win"
 	if has("nvim")
-		map ts :tabe $HOME/AppData/Local/nvim/init.vim<CR>
+		map ti :tabe $HOME/AppData/Local/nvim/init.vim<CR>
 	else
-		map ts:tabe $HOME/.vim/_vimrc
+		map ti :tabe $HOME/.vim/_vimrc<CR>
 	endif
 else
 	if has("nvim")
-		map ts :tabe $HOME/.config/nvim/init.vim<CR>
+		map ti :tabe $HOME/.config/nvim/init.vim<CR>
 	else
-		map ts:tabe $HOME/.vim/.vimrc
+		map ti :tabe $HOME/.vim/.vimrc<CR>
 	endif
 endif
 
@@ -757,21 +757,21 @@ endfunc
 " ===
 " === vim-visual-multi
 " ===
-"let g:VM_theme             = 'iceblue'
-"let g:VM_default_mappings = 0
-let g:VM_leader                     = {'default': ',', 'visual': ',', 'buffer': ','}
-let g:VM_maps                       = {}
-let g:VM_custom_motions             = {'n': 'h', 'i': 'l', 'u': 'k', 'e': 'j', 'N': '0', 'I': '$', 'h': 'e'}
-let g:VM_maps['i']                  = 'k'
-let g:VM_maps['I']                  = 'K'
-let g:VM_maps['Find Under']         = '<C-k>'
-let g:VM_maps['Find Subword Under'] = '<C-k>'
-let g:VM_maps['Find Next']          = ''
-let g:VM_maps['Find Prev']          = ''
-let g:VM_maps['Remove Region']      = 'q'
-let g:VM_maps['Skip Region']        = '<c-n>'
-let g:VM_maps["Undo"]               = 'l'
-let g:VM_maps["Redo"]               = '<C-r>'
+let g:VM_theme             = 'iceblue'
+let g:VM_default_mappings = 1
+let g:VM_leader                     = {'default': ',', 'visual': ',', 'buffer': ','}  
+" let g:VM_maps                       = {}
+" let g:VM_custom_motions             = {'n': 'h', 'i': 'l', 'u': 'k', 'e': 'j', 'N': '0', 'I': '$', 'h': 'e'}
+" "let g:VM_maps['i']                  = 'k'
+" "let g:VM_maps['I']                  = 'K'
+" let g:VM_maps['Find Under']         = '<C-k>'
+" let g:VM_maps['Find Subword Under'] = '<C-k>'
+" "let g:VM_maps['Find Next']          = 'n'
+" "let g:VM_maps['Find Prev']          = 'N'
+" let g:VM_maps['Skip Region']        = 'q'
+" let g:VM_maps['Remove Region']      = 'Q'
+" let g:VM_maps["Undo"]               = 'u'
+" let g:VM_maps["Redo"]               = '<C-r>'
 
 
 " ===
