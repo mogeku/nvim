@@ -76,6 +76,7 @@ filetype plugin on	"载入文件类型插件
 filetype plugin indent on "开启文件类型检查，并且载入与该类型对应的缩进规则。比如，如果编辑的是.py文件，Vim 就是会找 Python 的缩进规则~/.vim/indent/python.vim。
 
 set modifiable "设置可修改
+set noswapfile "关闭swap交换文件
 
 "set mouse=a "启用鼠标
 set nocompatible	"不与Vi兼容(采用Vim自己的操作指令)
