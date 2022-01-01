@@ -1165,12 +1165,6 @@ vmap <LEADER>u g<
 
 
 " ===
-" === vim-move
-" ===
-let g:move_key_modifier = 'C'
-
-
-" ===
 " === any-jump
 " ===
 nnoremap cj :AnyJump<CR>
