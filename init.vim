@@ -120,24 +120,24 @@ set backspace=indent,eol,start  "让退格键可以删除 indent(缩进), eol(�
 
 "保存上次编辑时的 undo
 if g:os == "win"
-	silent !mkdir -p $HOME/AppData/Local/nvim/tmp/backup
-	silent !mkdir -p $HOME/AppData/Local/nvim/tmp/undo
-	"silent !mkdir -p $HOME/AppData/Local/nvim/tmp/sessions
-	set backupdir=$HOME/AppData/Local/nvim/tmp/backup,.
-	set directory=$HOME/AppData/Local/nvim/tmp/backup,.
+	silent !mkdir -p \%USERPROFILE\%\AppData\Local\nvim\tmp\backup
+	silent !mkdir -p \%USERPROFILE\%\AppData\Local\nvim\tmp\undo
+	"silent !mkdir -p \%USERPROFILE\%\AppData\Local\nvim\tmp\sessions
+	set backupdir=$NVIM_HOME\tmp\backup,.
+	set directory=$NVIM_HOME\tmp\backup,.
 	if has('persistent_undo')
 		set undofile
-		set undodir=$HOME/AppData/Local/nvim/tmp/undo,.
+		set undodir=$NVIM_HOME\tmp\undo,.
 	endif
 else
-	silent !mkdir -p $NVIM_HOME/tmp/backup
-	silent !mkdir -p $NVIM_HOME/tmp/undo
-	"silent !mkdir -p $NVIM_HOME/tmp/sessions
-	set backupdir=$NVIM_HOME/tmp/backup,.
-	set directory=$NVIM_HOME/tmp/backup,.
+	silent !mkdir -p $HOME/.config/nvim/tmp/backup
+	silent !mkdir -p $HOME/.config/nvim/tmp/undo
+	"silent !mkdir -p $HOME/.config/nvim/tmp/sessions
+	set backupdir=$HOME/.config/nvim/tmp/backup,.
+	set directory=$HOME/.config/nvim/tmp/backup,.
 	if has('persistent_undo')
 		set undofile
-		set undodir=$NVIM_HOME/tmp/undo,.
+		set undodir=$HOME/.config/nvim/tmp/undo,.
 	endif
 endif
 
@@ -747,27 +747,13 @@ function g:Undotree_CustomMap()
 	nmap <buffer> E 5<plug>UndotreePreviousState
 endfunc
 
-
-" ==
-" == vim-multiple-cursor
-" ==
-"let g:multi_cursor_use_default_mapping = 0
-"let g:multi_cursor_start_word_key = '<c-k>'
-"let g:multi_cursor_select_all_word_key = '<a-k>'
-"let g:multi_cursor_start_key = 'g<c-k>'
-"let g:multi_cursor_select_all_key = 'g<a-k>'
-"let g:multi_cursor_next_key = '<c-k>'
-"let g:multi_cursor_prev_key = '<c-p>'
-"let g:multi_cursor_skip_key = '<C-s>'
-"let g:multi_cursor_quit_key = '<Esc>'
-
-
 " ===
 " === vim-visual-multi
 " ===
 let g:VM_theme             = 'iceblue'
 let g:VM_default_mappings = 1
 let g:VM_leader                     = {'default': ',', 'visual': ',', 'buffer': ','}  
+" let g:VM_maps['Add Cursor At Pos']         = '<C-;>'
 " let g:VM_maps                       = {}
 " let g:VM_custom_motions             = {'n': 'h', 'i': 'l', 'u': 'k', 'e': 'j', 'N': '0', 'I': '$', 'h': 'e'}
 " "let g:VM_maps['i']                  = 'k'
@@ -1137,7 +1123,8 @@ nmap ss <plug>(SubversiveSubstituteLine)
 " === vim-illuminate
 " ===
 let g:Illuminate_delay = 750
-hi illuminatedWord cterm=undercurl gui=undercurl
+let g:Illuminate_highlightUnderCursor = 0
+hi illuminatedWord cterm=underline gui=underline
 
 
 " ===
@@ -1170,7 +1157,7 @@ let g:dartfmt_options = ["-l 100"]
 " ===
 " === tcomment_vim
 " ===
-nnoremap ci cl
+" noremap ci cl
 let g:tcomment_textobject_inlinecomment = ''
 nmap <LEADER>c g>c
 vmap <LEADER>c g>
@@ -1289,7 +1276,6 @@ hi NonText ctermfg=gray guifg=grey10
 " === Necessary Commands to Execute
 " ===
 exec "nohlsearch"
-
 
 " Open the _machine_specific.vim file if it has just been created
 if has_machine_specific_file == 0
