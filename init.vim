@@ -72,7 +72,7 @@ set lazyredraw "性能考虑, 避免不必要的重绘
 "set regexpengine=1
 
 set cmdheight=2
-set shortmess=a
+"set shortmess=a
 
 " ===
 " === Editor behavior
