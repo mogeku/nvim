@@ -94,7 +94,7 @@ set rnu		"显示相对行号
 set showcmd	"输入的命令
 set wildmenu	"命令行模式下开启Tab自动补全功能
 set wildmode=full:list   " Better command line completion
-set nowrap	"过长的行自动分成几行显示
+set wrap	"过长的行自动分成几行显示
 set timeoutlen=400	"设置两个键直接的等待延迟
 set autochdir   "自动切换目录为当前目录
 set virtualedit=block,onemore   "允许光标出现在最后一个字符的后面
@@ -1130,7 +1130,7 @@ endif
 " ===
 nmap s <plug>(SubversiveSubstitute)
 nmap ss <plug>(SubversiveSubstituteLine)
-
+nmap S <plug>(SubversiveSubstituteToEndOfLine) 
 
 " ===
 " === vim-illuminate
@@ -1169,7 +1169,7 @@ let g:dartfmt_options = ["-l 100"]
 " ===
 " === tcomment_vim
 " ===
-nnoremap ci cl
+" nnoremap ci cl
 let g:tcomment_textobject_inlinecomment = ''
 nmap <LEADER>c g>c
 vmap <LEADER>c g>
