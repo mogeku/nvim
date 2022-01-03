@@ -122,9 +122,9 @@ set backspace=indent,eol,start  "让退格键可以删除 indent(缩进), eol(�
 
 "保存上次编辑时的 undo
 if g:os == "win"
-	silent !mkdir -p \%USERPROFILE\%\AppData\Local\nvim\tmp\backup
-	silent !mkdir -p \%USERPROFILE\%\AppData\Local\nvim\tmp\undo
-	"silent !mkdir -p \%USERPROFILE\%\AppData\Local\nvim\tmp\sessions
+	silent !mkdir \%USERPROFILE\%\AppData\Local\nvim\tmp\backup
+	silent !mkdir \%USERPROFILE\%\AppData\Local\nvim\tmp\undo
+	"silent !mkdir \%USERPROFILE\%\AppData\Local\nvim\tmp\sessions
 	set backupdir=$NVIM_HOME\tmp\backup,.
 	set directory=$NVIM_HOME\tmp\backup,.
 	if has('persistent_undo')
