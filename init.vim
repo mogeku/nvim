@@ -253,9 +253,9 @@ map th :tabp<CR>
 map tl :tabn<CR>
 
 "buffer设置
-noremap bh :bp<CR>
-noremap bl :bn<CR>
-noremap b0 :bfirst<CR>
+" noremap bh :bp<CR>
+" noremap bl :bn<CR>
+" noremap b0 :bfirst<CR>
 "打开我的vimrc设置
 if g:os == "win"
 	if has("nvim")
