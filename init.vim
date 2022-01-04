@@ -20,8 +20,9 @@ if !exists("g:os")
 	endif
 endif
 
+let $NVIM_HOME = $HOME.'\AppData\Local\nvim'
 if has("win64") || has("win32") || has("win16")
-	let $NVIM_HOME = $HOME.'/AppData/Local/nvim'
+	let $NVIM_HOME = $HOME.'\AppData\Local\nvim'
 else
 	let $NVIM_HOME = $HOME.'/.config/nvim'
 endif
@@ -50,7 +51,11 @@ endif
 let has_machine_specific_file = 1
 if empty(glob($NVIM_HOME.'/_machine_specific.vim'))
 	let has_machine_specific_file = 0
-	silent! exec "!cp ".$NVIM_HOME."/default_configs/_machine_specific_default.vim ".$NVIM_HOME."/_machine_specific.vim"
+    if g:os == "win"
+        silent !copy \%USERPROFILE\%\AppData\Local\nvim\default_configs\_machine_specific_default.vim \%USERPROFILE\%\AppData\Local\nvim\_machine_specific.vim
+    else
+        silent! exec "!cp ".$NVIM_HOME."/default_configs/_machine_specific_default.vim ".$NVIM_HOME."/_machine_specific.vim"
+    endif
 endif
 source $NVIM_HOME/_machine_specific.vim
 
