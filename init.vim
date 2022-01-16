@@ -281,6 +281,9 @@ endif
 " ===
 call plug#begin('~/.vim/plugged')
 
+" Input switch
+Plug 'mogeku/neuims'
+
 " Editor dress
 "Plug 'vim-airline/vim-airline'
 "Plug 'vim-airline/vim-airline-themes'
@@ -464,6 +467,20 @@ call plug#end()
 
 
 " ===================== Start of Plugin Settings =====================
+
+
+" ===
+" === mogeku/neuims
+" ===
+let g:neuims = {
+            \ 'im': 'US Keyboard',
+            \ 'status': 1,
+            \ 'keyboards': {
+            \       'US Keyboard': 0x0409,
+            \       'Microsoft Pinyin': 0x0804,
+            \     },
+            \  }
+
 
 " ===
 " === vim-airline
