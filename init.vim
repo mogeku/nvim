@@ -264,15 +264,15 @@ map tl :tabn<CR>
 "打开我的vimrc设置
 if g:os == "win"
 	if has("nvim")
-		map ti :tabe $HOME/AppData/Local/nvim/init.vim<CR>
+		map ti :sp $HOME/AppData/Local/nvim/init.vim<CR>
 	else
-		map ti :tabe $HOME/.vim/_vimrc<CR>
+		map ti :sp $HOME/.vim/_vimrc<CR>
 	endif
 else
 	if has("nvim")
-		map ti :tabe $HOME/.config/nvim/init.vim<CR>
+		map ti :sp $HOME/.config/nvim/init.vim<CR>
 	else
-		map ti :tabe $HOME/.vim/.vimrc<CR>
+		map ti :sp $HOME/.vim/.vimrc<CR>
 	endif
 endif
 
