@@ -59,7 +59,6 @@ if empty(glob($NVIM_HOME.'/_machine_specific.vim'))
 endif
 source $NVIM_HOME/_machine_specific.vim
 
-
 " ===
 " === System
 " ===
@@ -283,6 +282,7 @@ call plug#begin('~/.vim/plugged')
 
 " Input switch
 Plug 'mogeku/neuims'
+Plug 'brglng/vim-im-select'
 
 " Editor dress
 "Plug 'vim-airline/vim-airline'
