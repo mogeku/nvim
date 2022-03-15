@@ -396,6 +396,7 @@ Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle', 'for': ['text', 'markdown', 'vim-plug'] }
 Plug 'mzlogin/vim-markdown-toc', { 'for': ['gitignore', 'markdown', 'vim-plug'] }
 Plug 'dkarter/bullets.vim'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 " Other filetypes
 
@@ -652,6 +653,14 @@ let g:instant_markdown_autostart = 0
 " let g:instant_markdown_allow_external_content = 0
 " let g:instant_markdown_mathjax = 1
 let g:instant_markdown_autoscroll = 1
+
+
+" ===
+" === markdown-preview.nvim
+" ===
+let g:mkdp_browser = 'microsoft-edge'
+" let g:mkdp_browser = 'firefox'
+" let g:mkdp_auto_start = 1
 
 
 " ===
