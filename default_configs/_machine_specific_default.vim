@@ -1,4 +1,9 @@
 " please read through this file and change what you need to change
+"
+" E117: Unknown function: SemshiBufWipeout
+" run :UpdateRemotePlugins
+"
+" :PlugInstall
 
 if g:os == 'win'
 	let g:python_host_prog='D:/Program Files/Python/Python2.7.18/python.exe'
