@@ -57,6 +57,8 @@
 	"diagnostic.virtualTextPrefix": " ❯❯❯ ",
 	"diagnostic.virtualText": false,
 	"codeLens.enable": true,
+	"codeLens.position": "eol",
+	"codeLens.separator": "➤",
 	"list.previewHighlightGroup": "Statement",
 	"list.nextKeymap": "<C-e>",
 	"list.previousKeymap": "<C-u>",

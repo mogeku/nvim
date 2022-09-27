@@ -75,7 +75,7 @@ set re=0
 set lazyredraw "性能考虑, 避免不必要的重绘
 "set regexpengine=1
 
-set cmdheight=2
+set cmdheight=1
 "set shortmess=a
 
 " ===
