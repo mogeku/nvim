@@ -16,7 +16,7 @@ if !exists("g:os")
 	if has("win64") || has("win32") || has("win16")
 		let g:os = "win"
 	else
-		let g:os = substitute(system('uname'), '\n', '', '')
+		let g:os = "linux"
 	endif
 endif
 
@@ -136,8 +136,8 @@ if g:os == "win"
 		set undodir=$NVIM_HOME\tmp\undo,.
 	endif
 else
-	silent !mkdir -p $HOME/.config/nvim/tmp/backup
-	silent !mkdir -p $HOME/.config/nvim/tmp/undo
+	" silent !mkdir -p $HOME/.config/nvim/tmp/backup
+	" silent !mkdir -p $HOME/.config/nvim/tmp/undo
 	"silent !mkdir -p $HOME/.config/nvim/tmp/sessions
 	set backupdir=$HOME/.config/nvim/tmp/backup,.
 	set directory=$HOME/.config/nvim/tmp/backup,.
@@ -282,7 +282,7 @@ call plug#begin('~/.vim/plugged')
 
 " Input switch
 Plug 'mogeku/neuims'
-Plug 'brglng/vim-im-select'
+" Plug 'brglng/vim-im-select'
 
 " Editor dress
 "Plug 'vim-airline/vim-airline'
@@ -294,7 +294,7 @@ Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-treesitter/playground'
 
 " Pretty Dress 主题
-Plug 'theniceboy/nvim-deus'
+Plug 'mogeku/nvim-deus'
 "Plug 'arzg/vim-colors-xcode'
 
 " Status line 底部状态栏
@@ -1120,27 +1120,11 @@ let g:vmt_fence_closing_text = '/TOC'
 " ===
 " === rnvimr
 " ===
+" https://github.com/kevinhwang91/rnvimr
 if g:os != "win"
-    let g:rnvimr_ex_enable = 1
-    let g:rnvimr_pick_enable = 1
-    let g:rnvimr_draw_border = 0
-    " let g:rnvimr_bw_enable = 1
-    highlight link RnvimrNormal CursorLine
-    nnoremap <silent> R :RnvimrToggle<CR><C-\><C-n>:RnvimrResize 0<CR>
-    let g:rnvimr_action = {
-                \ '<C-t>': 'NvimEdit tabedit',
-                \ '<C-x>': 'NvimEdit split',
-                \ '<C-v>': 'NvimEdit vsplit',
-                \ 'gw': 'JumpNvimCwd',
-                \ 'yw': 'EmitRangerCwd'
-                \ }
-    let g:rnvimr_layout = { 'relative': 'editor',
-                \ 'width': &columns,
-                \ 'height': &lines,
-                \ 'col': 0,
-                \ 'row': 0,
-                \ 'style': 'minimal' }
-    let g:rnvimr_presets = [{'width': 1.0, 'height': 1.0}]
+    " highlight link RnvimrNormal CursorLine
+    nnoremap <silent> R :RnvimrToggle<CR><C-\><C-n>:RnvimrResize 2<CR>
+    tnoremap <silent> <LEADER>r <C-\><C-n>:RnvimrResize<CR>
 endif
 
 
