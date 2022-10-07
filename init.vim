@@ -491,6 +491,7 @@ let g:neuims = {
 "let g:airline#extensions#tabline#buffer_nr_show = 1
 "let g:airline_theme='onedark'
 "set laststatus=2	"设置状态行显示在倒数第2行
+let g:airline#extensions#hunks#enabled = 0
 
 " ===
 " === onedark
@@ -1292,4 +1293,8 @@ if has_machine_specific_file == 0
 	exec "e ".$NVIM_HOME."/_machine_specific.vim"
 endif
 
+" 打开性能分析日志
+" profile start ~/profile.log
+" profile func *
+" profile file *
 
