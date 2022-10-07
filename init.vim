@@ -41,10 +41,6 @@ if empty(glob($NVIM_HOME.'/autoload/plug.vim'))
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-if empty(glob('~/.vim/plugged/wildfire.vim/autoload/wildfire.vim'))
-	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
 " ===
 " === Create a _machine_specific.vim file to adjust machine specific stuff, like python interpreter location
 " ===
@@ -101,7 +97,7 @@ set showcmd	"输入的命令
 set wildmenu	"命令行模式下开启Tab自动补全功能
 set wildmode=full:list   " Better command line completion
 set wrap	"过长的行自动分成几行显示
-set timeoutlen=400	"设置两个键直接的等待延迟
+set timeoutlen=200	"设置两个键直接的等待延迟
 set autochdir   "自动切换目录为当前目录
 set virtualedit=block,onemore   "允许光标出现在最后一个字符的后面
 set viewoptions=cursor,folds,slash,unix
@@ -407,16 +403,15 @@ Plug 'mg979/vim-visual-multi'
 Plug 'tomtom/tcomment_vim' " in <space>c to comment a line
 Plug 'theniceboy/antovim' " gs to switch
 Plug 'tpope/vim-surround' " type yskw' to wrap the word with '' or type cs'` to change 'word' to `word`
-Plug 'gcmt/wildfire.vim' " in Visual mode, type k' to select all text in '', or type k) k] k} kp
+" Plug 'gcmt/wildfire.vim' " in Visual mode, type k' to select all text in '', or type k) k] k} kp
 " Plug 'junegunn/vim-after-object' " da= to delete what's after =
 Plug 'godlygeek/tabular' " ga, or :Tabularize <regex> to align
 Plug 'tpope/vim-capslock'	" Ctrl+L (insert) to toggle capslock
-Plug 'easymotion/vim-easymotion' "快速跳转
+" Plug 'easymotion/vim-easymotion' "快速跳转
 " Plug 'Konfekt/FastFold'
 "Plug 'junegunn/vim-peekaboo'
 "Plug 'wellle/context.vim'
 Plug 'svermeulen/vim-subversive'
-Plug 'theniceboy/argtextobj.vim'
 Plug 'rhysd/clever-f.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'theniceboy/pair-maker.vim'
@@ -439,7 +434,7 @@ Plug 'brooth/far.vim', { 'on': ['F', 'Far', 'Fardo'] } "<LEADER>f
 
 " Mini Vim-APP
 "Plug 'jceb/vim-orgmode'
-"Plug 'mhinz/vim-startify'
+Plug 'mhinz/vim-startify'
 Plug 'skywind3000/asynctasks.vim' "为 Vim 引入类似 vscode 的 tasks 任务系统，用统一的方式系统化解决各类：编译/运行/测试/部署任务。
 Plug 'skywind3000/asyncrun.vim'
 
@@ -970,9 +965,9 @@ let g:go_doc_keywordprg_enabled = 0
 " ===
 " === vim-easymotion
 " ===
-let g:EasyMotion_do_mapping = 0
-let g:EasyMotion_do_shade = 0
-let g:EasyMotion_smartcase = 1
+" let g:EasyMotion_do_mapping = 0
+" let g:EasyMotion_do_shade = 0
+" let g:EasyMotion_smartcase = 1
 " map ' <Plug>(easymotion-overwin-f2)
 " nmap ' <Plug>(easymotion-overwin-f2)
 "map E <Plug>(easymotion-j)
@@ -1127,6 +1122,8 @@ if g:os != "win"
     nnoremap <silent> R :RnvimrToggle<CR><C-\><C-n>:RnvimrResize 2<CR>
     tnoremap <silent> <LEADER>r <C-\><C-n>:RnvimrResize<CR>
 endif
+" Make Ranger to be hidden after picking a file
+let g:rnvimr_enable_picker = 1
 
 
 " ===
