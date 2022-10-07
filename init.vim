@@ -277,7 +277,7 @@ endif
 call plug#begin('~/.vim/plugged')
 
 " Input switch
-Plug 'mogeku/neuims'
+" Plug 'mogeku/neuims'
 " Plug 'brglng/vim-im-select'
 
 " Editor dress
@@ -468,14 +468,14 @@ call plug#end()
 " ===
 " === mogeku/neuims
 " ===
-let g:neuims = {
-            \ 'im': 'US Keyboard',
-            \ 'status': 1,
-            \ 'keyboards': {
-            \       'US Keyboard': 0x0409,
-            \       'Microsoft Pinyin': 0x0804,
-            \     },
-            \  }
+" let g:neuims = {
+"             \ 'im': 'US Keyboard',
+"             \ 'status': 1,
+"             \ 'keyboards': {
+"             \       'US Keyboard': 0x0409,
+"             \       'Microsoft Pinyin': 0x0804,
+"             \     },
+"             \  }
 
 
 " ===
