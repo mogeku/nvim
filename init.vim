@@ -598,16 +598,17 @@ endfunction
 "打开历史剪切板
 nnoremap <silent> <space>y :<C-u>CocList -A --normal yank<cr> 
 "列出定义列表 
-nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> <F12> <Plug>(coc-definition)
 "分屏列出定义列表 
-nmap <silent> gD :tab sp<CR><Plug>(coc-definition)
+" nmap <silent> gD :tab sp<CR><Plug>(coc-definition)
 "转至类型定义
-nmap <silent> gy <Plug>(coc-type-definition)
+" nmap <silent> gy <Plug>(coc-type-definition)
 " nmap <silent> gi <Plug>(coc-implementation)
-"列出应用
-nmap <silent> gr <Plug>(coc-references)
+" 列出应用
+" shift + F12
+nmap <silent> <F24> <Plug>(coc-references)
 "重命名
-nmap <leader>rn <Plug>(coc-rename)
+nmap <F2> <Plug>(coc-rename)
 
 "打开文件浏览器
 nmap tt :CocCommand explorer<CR>
