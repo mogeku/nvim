@@ -318,12 +318,8 @@ Plug 'pechorin/any-jump.vim' "自动跳转定义
 " Taglist
 Plug 'liuchengxu/vista.vim' "显示搜索LSP符号,tags
 
-" Debugger "调试, 暂时不用, 暂时使用pycharm
-" Plug 'puremourning/vimspector', {'do': './install_gadget.py --enable-c --enable-python --enable-go'}
-
 " Auto Complete
 Plug 'neoclide/coc.nvim', {'branch': 'release'} "自动补全
-"Plug 'neoclide/coc.nvim', {'branch': 'release', 'tag': 'v0.0.79'}
 "Plug 'wellle/tmux-complete.vim' "查找tmux其他窗口中的字符串来补全
 
 " Snippets
@@ -458,12 +454,23 @@ Plug 'lambdalisue/suda.vim' " do stuff like :sudowrite
 " Plug 'kana/vim-textobj-user'
 " Plug 'roxma/nvim-yarp'
 
+Plug 'mogeku/vim-fileheader' "添加文件头部注释信息
 
 call plug#end()
 
 
 " ===================== Start of Plugin Settings =====================
 
+" ===
+" === mogeku/vim-fileheader
+" ===
+
+let g:fileheader_auto_add = 1   "自动添加文件头
+let g:fileheader_auto_update = 0    "关闭自动更新头部
+let g:fileheader_delimiter_map = {
+            \ 'sh': { 'begin': "#!/bin/bash\n ", 'char': '# ', 'end': '' },
+            \ 'python': { 'begin': "#!/usr/bin/env python\n ", 'char': '# ', 'end': '' },
+            \ }
 
 " ===
 " === mogeku/neuims
@@ -1075,26 +1082,6 @@ noremap \p :echo expand('%:p')<CR>
 " ===
 cnoreabbrev sudowrite w suda://%
 cnoreabbrev sw w suda://%
-
-
-" ===
-" === vimspector
-" ===
-"let g:vimspector_enable_mappings = 'HUMAN'
-"function! s:read_template_into_buffer(template)
-"	" has to be a function to avoid the extra space fzf#run insers otherwise
-"	execute '0r ~/.config/nvim/sample_vimspector_json/'.a:template
-"endfunction
-"command! -bang -nargs=* LoadVimSpectorJsonTemplate call fzf#run({
-"			\   'source': 'ls -1 ~/.config/nvim/sample_vimspector_json',
-"			\   'down': 20,
-"			\   'sink': function('<sid>read_template_into_buffer')
-"			\ })
-"" noremap <leader>vs :tabe .vimspector.json<CR>:LoadVimSpectorJsonTemplate<CR>
-"sign define vimspectorBP text=☛ texthl=Normal
-"sign define vimspectorBPDisabled text=☞ texthl=Normal
-"sign define vimspectorPC text=🔶 texthl=SpellBad
-
 
 " ===
 " === reply.vim
