@@ -286,7 +286,7 @@ call plug#begin('~/.vim/plugged')
 "Plug 'joshdick/onedark.vim'
 
 " Treesitter 代码高亮
-Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/playground'
 
 " Pretty Dress 主题
@@ -559,8 +559,7 @@ let g:coc_global_extensions = [
 	\ 'coc-vetur',
 	\ 'coc-vimlsp',
 	\ 'coc-yaml',
-	\ 'coc-yank',
-	\ 'https://github.com/rodrigore/coc-tailwind-intellisense']
+	\ 'coc-yank' ]
 inoremap <silent><expr> <TAB>
 	\ pumvisible() ? "\<C-n>" :
 	\ Check_back_space() ? "\<TAB>" :
@@ -873,10 +872,10 @@ let g:UltiSnipsJumpBackwardTrigger="<c-n>"
 let g:UltiSnipsSnippetDirectories = [$NVIM_HOME.'/Ultisnips/', $NVIM_HOME.'/plugged/vim-snippets/UltiSnips/']
 silent! au BufEnter,BufRead,BufNewFile * silent! unmap <c-r>
 " Solve extreme insert-mode lag on macOS (by disabling autotrigger)
-augroup ultisnips_no_auto_expansion
-    au!
-    au VimEnter * au! UltiSnips_AutoTrigger
-augroup END
+" augroup ultisnips_no_auto_expansion
+"     au!
+"     au VimEnter * au! UltiSnips_AutoTrigger
+" augroup END
 
 
 
@@ -1192,15 +1191,6 @@ let g:agit_no_default_mappings = 1
 " ===
 " === nvim-treesitter
 " ===
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = {"typescript", "dart", "java"},     -- one of "all", "language", or a list of languages
-  highlight = {
-    enable = true,              -- false will disable the whole extension
-    disable = { "c", "rust" },  -- list of language that will be disabled
-  },
-}
-EOF
 
 
 " ===
@@ -1209,7 +1199,7 @@ EOF
 noremap <c-g> :LazyGit<CR>
 let g:lazygit_floating_window_winblend = 0 " transparency of floating window
 let g:lazygit_floating_window_scaling_factor = 1.0 " scaling factor for floating window
-let g:lazygit_floating_window_corner_chars = ['╭', '╮', '╰', '╯'] " customize lazygit popup window corner characters
+let g:lazygit_floating_window_border_chars = ['╭', '╮', '╰', '╯'] " customize lazygit popup window corner characters
 let g:lazygit_use_neovim_remote = 1 " for neovim-remote support
 
 
@@ -1258,7 +1248,7 @@ let g:terminal_color_14 = '#9AEDFE'
 "color dracula
 "color one
 "color gruvbox
-color deus
+"color deus
 "let ayucolor="light"
 "color ayu
 "color xcodelighthc
