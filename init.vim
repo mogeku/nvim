@@ -286,8 +286,9 @@ call plug#begin('~/.vim/plugged')
 "Plug 'joshdick/onedark.vim'
 
 " Treesitter 代码高亮
+" playground 已归档，和当前 nvim-treesitter main 不兼容（define_modules 已删除）
+" 替代：:InspectTree 语法树，:Inspect 光标处 capture，:EditQuery 实时 query
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'nvim-treesitter/playground'
 
 " Pretty Dress 主题
 Plug 'mogeku/nvim-deus'
@@ -370,7 +371,7 @@ Plug 'fatih/vim-go' , { 'for': ['go', 'vim-plug'], 'tag': '*' }
 " Python
 " Plug 'tmhedberg/SimpylFold', { 'for' :['python', 'vim-plug'] }
 Plug 'Vimjas/vim-python-pep8-indent', { 'for' :['python', 'vim-plug'] }
-Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins'}
+Plug 'wookayin/semshi', { 'do': ':UpdateRemotePlugins', 'tag': '*' }
 "Plug 'vim-scripts/indentpython.vim', { 'for' :['python', 'vim-plug'] }
 "Plug 'plytophogy/vim-virtualenv', { 'for' :['python', 'vim-plug'] }
 Plug 'tweekmonster/braceless.vim', { 'for' :['python', 'vim-plug'] }
